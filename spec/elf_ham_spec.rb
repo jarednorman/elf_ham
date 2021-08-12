@@ -37,7 +37,7 @@ RSpec.describe ElfHam do
       row["header2"] != "b"
     end.transform do |row|
       row["header3"] = "elfham"
-    end.output).to eq(<<~CSV)
+    end.result).to eq(<<~CSV)
       header1,header2,header3,header4
       a,d,elfham,b
       elf,ham,elfham,ham
