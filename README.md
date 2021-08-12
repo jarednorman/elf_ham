@@ -4,9 +4,41 @@ ElfHam is an extremely simple utility gem that's useful for transform CSVs.
 
 ## Usage
 
-```sh
-gem install elf_ham
-```
+1. Install the gem:
+
+   ```sh
+   gem install elf_ham
+   ```
+
+2. Create a transformation script:
+
+   ```sh
+   echo '#!/usr/bin/env ruby
+
+   require "elf_ham"
+
+   puts ElfHam.new(ARGF.read).select do |row|
+     row["header2"] != "b"
+   end.transform do |row|
+     row["header3"] = "elfham"
+   end.output' > transform.rb
+   ```
+
+3. Make the script executable:
+
+   ```sh
+   chmod u+x transform.rb
+   ```
+
+4. Run it:
+
+   ```sh
+   transform.rb path/to/your.csv > transformed.csv
+
+   # or
+
+   cat path/to/your.csv | transform.rb > transformed.csv
+   ```
 
 ## Development
 
