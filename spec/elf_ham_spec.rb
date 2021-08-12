@@ -14,10 +14,10 @@ RSpec.describe ElfHam do
     end
 
     expect(elf_ham.result).to eq(<<~CSV)
-        header1,header2,header3,header4
-        b,b,c,
-        d,d,,b
-        ham,ham,elf,ham
+      header1,header2,header3,header4
+      b,b,c,
+      d,d,,b
+      ham,ham,elf,ham
     CSV
   end
 
@@ -27,8 +27,20 @@ RSpec.describe ElfHam do
     end
 
     expect(elf_ham.result).to eq(<<~CSV)
-        header1,header2,header3,header4
-        elf,ham,elf,ham
+      header1,header2,header3,header4
+      elf,ham,elf,ham
+    CSV
+  end
+
+  it "can be chained" do
+    expect(elf_ham.select do |row|
+      row["header2"] != "b"
+    end.transform do |row|
+      row["header3"] = "elfham"
+    end.output).to eq(<<~CSV)
+      header1,header2,header3,header4
+      a,d,elfham,b
+      elf,ham,elfham,ham
     CSV
   end
 end

@@ -11,10 +11,12 @@ class ElfHam
 
   def transform(&block)
     @rows.each(&block)
+    self
   end
 
   def select(&block)
     @rows.select!(&block)
+    self
   end
 
   def result
