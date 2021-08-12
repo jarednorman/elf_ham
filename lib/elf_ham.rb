@@ -1,8 +1,31 @@
 # frozen_string_literal: true
 
+require "csv"
+
 require_relative "elf_ham/version"
 
-module ElfHam
-  class Error < StandardError; end
-  # Your code goes here...
+class ElfHam
+  def initialize(csv_data)
+    @rows = CSV.parse(csv_data, headers: true).each.to_a
+  end
+
+  def transform(&block)
+    @rows.each(&block)
+  end
+
+  def select(&block)
+    @rows.select!(&block)
+  end
+
+  def result
+    CSV.generate do |csv|
+      @rows.each_with_index do |row, index|
+        if index == 0
+          csv << row.headers
+        end
+
+        csv << row.fields
+      end
+    end
+  end
 end

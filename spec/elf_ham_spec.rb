@@ -1,11 +1,34 @@
 # frozen_string_literal: true
 
 RSpec.describe ElfHam do
-  it "has a version number" do
-    expect(ElfHam::VERSION).not_to be nil
+  let(:elf_ham) { described_class.new(<<~CSV) }
+    header1,header2,header3,header4
+    a,b,c,
+    a,d,,b
+    elf,ham,elf,ham
+  CSV
+
+  it "transforms CSV rows" do
+    elf_ham.transform do |row|
+      row["header1"] = row["header2"]
+    end
+
+    expect(elf_ham.result).to eq(<<~CSV)
+        header1,header2,header3,header4
+        b,b,c,
+        d,d,,b
+        ham,ham,elf,ham
+    CSV
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  it "filters CSV rows" do
+    elf_ham.select do |row|
+      row["header1"] != "a"
+    end
+
+    expect(elf_ham.result).to eq(<<~CSV)
+        header1,header2,header3,header4
+        elf,ham,elf,ham
+    CSV
   end
 end
