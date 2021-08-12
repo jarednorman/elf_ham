@@ -19,7 +19,7 @@ elf_ham.transform do |row|
 end
 
 # Print the result
-puts elf_ham.output
+puts elf_ham.result
 ```
 
 ## Instructions
@@ -37,11 +37,17 @@ puts elf_ham.output
 
    require "elf_ham"
 
-   puts ElfHam.new(ARGF.read).select do |row|
+   elf_ham = ElfHam.new(ARGF.read)
+
+   elf_ham.select do |row|
      row["header2"] != "b"
-   end.transform do |row|
+   end
+
+   elf_ham.transform do |row|
      row["header3"] = "elfham"
-   end.output' > transform.rb
+   end
+
+   puts elf_ham.result' > transform.rb
    ```
 
 3. Make the script executable:
